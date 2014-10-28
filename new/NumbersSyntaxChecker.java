@@ -50,31 +50,35 @@ public class NumbersSyntaxChecker {
 	 * @param currentWord
 	 */
 	private void processWord(int value) {
-
+        //First we check the words that just take up the ones place.
+        if(value <= 9){
+            onesCase();
+        }
+        //Next we check ten and the teens, as they occupy the tens and ones place.
+        else if(value <= 19){
+            teensCase();
+        }
+        //Next we check the n*10 words. not including 10.
+        else if(value <= 90){
+            ntyCase();
+        }
+        //Next we check if it can be hundred.
+        else if(value == 100){
+            hundredCase();
+        }
+        //Next we check if it can be 1000
+        else if(value == 1000){
+            thousandCase();
+        }
 		//Lastly we check if it can be 1000000
-		if(value == 100000){
+		else if(value == 100000){
 			millionCase();
 		}
-		//Next we check if it can be 1000
-		else if(value == 1000){
-			thousandCase();
-		}
-		//Next we check if it can be hundred.
-		else if(value == 100){
-			hundredCase();
-		}
-		//Next we check the n*10 words. not including 10.
-		else if(value <= 90){
-			ntyCase();
-		}
-		//Next we check ten and the teens, as they occupy the tens and ones place.
-		else if(value <= 19){
-			teensCase();
-		}
-		//First we check the words that just take up the ones place.
-		else if(value <= 9){
-			onesCase();
-		}
+
+
+
+
+
 	}
 
 	/**

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -87,14 +88,9 @@ public class Numbers {
 	 * @return The words that make up the string.
 	 */
 	private static List<SpecialWords> explodeString(String s){
-        List<String> words = new ArrayList<String>();
-        if (s.contains(" ")) {
-            String[] splitArr = s.split(" ");
-        } else {
-            words.add(s.trim());
-        }
-
+        List<String> words = Arrays.asList(s.split(" "));
 		List<SpecialWords> enumWords = new ArrayList<SpecialWords>();
+        System.out.println(words.toString());
 
 		for(int j = 0; j < words.size(); j++){
 			enumWords.add(SpecialWords.valueOf(words.get(j)));
