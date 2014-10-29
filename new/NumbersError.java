@@ -30,7 +30,7 @@ public class NumbersError {
      * @param value - the string to check for space at
      *              end of
      */
-    private static void checkSpaceAtEnd(String value) {
+    public static void checkSpaceAtEnd(String value) {
         if (value.lastIndexOf(" ") == value.length()-1) {
             throw new IllegalArgumentException("Cannot have space at end.");
         }
@@ -43,7 +43,7 @@ public class NumbersError {
      * @param value - the string to check for space at
      *              front of
      */
-    private static void checkSpaceAtFront(String value) {
+    public static void checkSpaceAtFront(String value) {
         if (value.indexOf(" ") == 0){
             throw new IllegalArgumentException("Cannot have space at front.");
         }
@@ -55,7 +55,7 @@ public class NumbersError {
      *
      * @param value - the string to check for adjacent spaces
      */
-    private static void checkAdjacentSpaces(String value) {
+    public static void checkAdjacentSpaces(String value) {
        int currSpace = value.indexOf(" ");
         boolean onSpace = false;
         boolean adjacentSpaces = false;
@@ -78,7 +78,7 @@ public class NumbersError {
      * @param value - the string to check for the improper use in
      * @param negWord - the negative word to check for in the string
      */
-    private static void checkMisplacedNegative(String value, String negWord) {
+    public static void checkMisplacedNegative(String value, String negWord) {
         int negIndex = value.indexOf(negWord);
         int indexAfterNeg = negIndex + negWord.length();
         if (negIndex > 0){
@@ -102,6 +102,18 @@ public class NumbersError {
         checkAdjacentValues(enums, 9, 19);
         //Check adjacent nty values.
         checkAdjacentValues(enums, 19, 90);
+        //Check hundred modifier.
+        checkHundredModifier(enums);
+    }
+
+    /**
+     * Checks if the word "hundred" has a modifier.
+     * Throws an exception if not.
+     *
+     * @param enums - the enums to check if hundred has a modifier in
+     */
+    public static void checkHundredModifier(List<SpecialWords> enums) {
+
     }
 
     /**

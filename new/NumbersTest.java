@@ -274,7 +274,7 @@ public class NumbersTest {
     }
 
     @Test
-    public void testSimpleOnes() {
+    public void testOnes() {
         assertEquals(Numbers.stringToInteger("two"), 2);
         assertEquals(Numbers.stringToInteger("eight"), 8);
     }
@@ -320,4 +320,15 @@ public class NumbersTest {
         assertEquals(Numbers.stringToInteger("two thousand three hundred ten"), 2310);
         assertEquals(Numbers.stringToInteger("two thousand three hundred thirteen"), 2313);
     }
+
+    //Test one word cases
+    //Test two word cases
+    //Test hundred thousand case
+    //Test negative numbers
+    //Test million thousand
+    //Test number with all fields (million..thousand..hundred)
+    //Test adjacent values (exception)
+    //Test wrong order (exception)
+    //Test double negative
+    //Test multiple weird spaces
 }

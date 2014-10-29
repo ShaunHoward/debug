@@ -128,7 +128,6 @@ public class NumbersSyntaxChecker {
 			canBeOnes = true;
 			canBeTens = false;
 			canBeMultiplier = true;
-
 		}
 		else{
 			throw new IllegalArgumentException();
