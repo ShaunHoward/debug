@@ -71,15 +71,21 @@ public class NumbersError {
     }
 
     /**
-     * Checks if negative is after beginning of word.
+     * Checks if negative is after beginning of word or does not have
+     * space after it.
      * Exception is throw if so.
      *
-     * @param value - the string to check for the negative index in
+     * @param value - the string to check for the improper use in
      * @param negWord - the negative word to check for in the string
      */
     private static void checkMisplacedNegative(String value, String negWord) {
-        if (value.indexOf(negWord) > 0){
+        int negIndex = value.indexOf(negWord);
+        int indexAfterNeg = negIndex + negWord.length();
+        if (negIndex > 0){
             throw new IllegalArgumentException("Must put negative at front.");
+        }
+        if (indexAfterNeg < value.length() && value.charAt(indexAfterNeg) != ' '){
+            throw new IllegalArgumentException("Must have space after negative.");
         }
     }
 
