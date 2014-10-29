@@ -103,31 +103,39 @@ public class NumbersError {
         //Check adjacent nty values.
         checkAdjacentValues(enums, 19, 90);
         //Check hundred modifier.
-        checkHundredModifier(enums);
+        checkValueModifier(100, enums, 0, 9);
         //Check thousand modifier.
+        checkValueModifier(1000, enums, 0, 100);
         //Check million modifier.
+        checkValueModifier(1000000, enums, 0, 100);
         //Check thousand - million
+//        checkThousandMillion(enums);
+    }
 
+    private static void checkThousandModifier(List<SpecialWords> enums) {
     }
 
     /**
-     * Checks if the word "hundred" has a modifier.
+     * Checks if the input number to check has a modifier.
      * Throws an exception if not.
      *
+     * @param numToCheck - the number to check for a modifier
      * @param enums - the enums to check if hundred has a modifier in
+     * @param rangeStart - the starting range of the modifier
+     * @param rangeEnd - the ending range of the modifier
      */
-    public static void checkHundredModifier(List<SpecialWords> enums) {
-        boolean hadHundred = false;
+    public static void checkValueModifier(int numToCheck, List<SpecialWords> enums, int rangeStart, int rangeEnd) {
+        boolean hadValue = false;
         for (int i = enums.size() - 1; i >= 0; i--) {
-            if (enums.get(i).value == 100){
-                hadHundred = true;
-            } else if (hadHundred && !isInRange(enums.get(i).value, 0, 9)) {
-                throw new IllegalArgumentException("Need proper hundreds modifier.");
+            if (enums.get(i).value == numToCheck){
+                hadValue = true;
+            } else if (hadValue && !isInRange(enums.get(i).value, rangeStart, rangeStart)) {
+                throw new IllegalArgumentException("Need proper value modifier.");
             } else {
-                hadHundred = false;
+                hadValue = false;
             }
         }
-        throwExceptionWhenTrue(hadHundred);
+        throwExceptionWhenTrue(hadValue);
     }
 
     /**
