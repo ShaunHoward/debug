@@ -23,6 +23,9 @@ public class Numbers {
 		if(inputString.equals("zero") || inputString.equals("naught")){
 			return 0;
 		}
+
+        //Check if the input string has erroneous syntax.
+        NumbersError.checkStringSyntax(inputString);
 		
 		//We will multiply the final value by this to ensure it handles the negative.
 		int negativeMultiplier = 1;
@@ -32,6 +35,7 @@ public class Numbers {
 			inputString = inputString.replace("negative", "");
             inputString = inputString.replace("minus", "");
 			negativeMultiplier = -1;
+            inputString = inputString.trim();
 		}
 
 		//Send to compute rest of number at this point.
@@ -45,7 +49,7 @@ public class Numbers {
 	 */
 	private static int computeInteger(String inputString) {
         //Gather list of special words from exploding the string.
-		List<SpecialWords> words = explodeString(inputString.trim());
+		List<SpecialWords> words = explodeString(inputString);
 		
 		//Check the remaining syntax, to make sure it will not yield strange results.
 		NumbersSyntaxChecker syntaxChecker = new NumbersSyntaxChecker();
