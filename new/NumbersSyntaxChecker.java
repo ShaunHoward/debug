@@ -46,12 +46,23 @@ public class NumbersSyntaxChecker {
 	}
 
 	/**
-	 * A method which directs to the correct case method depending on the value of the word.
-	 * @param currentWord
+	 * A method which directs to the correct case method depending on the input value.
 	 */
 	private void processWord(int value) {
+        //Next we check if it can be hundred.
+        if(value == 100){
+            hundredCase();
+        }
+        //Next we check if it can be 1000
+        else if(value == 1000){
+            thousandCase();
+        }
+        //Lastly we check if it can be 1000000
+        else if(value == 100000){
+            millionCase();
+        }
         //First we check the words that just take up the ones place.
-        if(value <= 9){
+        else if(value <= 9){
             onesCase();
         }
         //Next we check ten and the teens, as they occupy the tens and ones place.
@@ -62,23 +73,6 @@ public class NumbersSyntaxChecker {
         else if(value <= 90){
             ntyCase();
         }
-        //Next we check if it can be hundred.
-        else if(value == 100){
-            hundredCase();
-        }
-        //Next we check if it can be 1000
-        else if(value == 1000){
-            thousandCase();
-        }
-		//Lastly we check if it can be 1000000
-		else if(value == 100000){
-			millionCase();
-		}
-
-
-
-
-
 	}
 
 	/**

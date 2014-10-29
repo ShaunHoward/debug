@@ -42,46 +42,50 @@ public class Numbers {
 	 */
 	private static int computeInteger(String inputString) {
 		List<SpecialWords> words = explodeString(inputString);
+        SpecialWords keyWord = null;
 		
 		//Check the remaining syntax, to make sure it will not yield strange results.
 		NumbersSyntaxChecker syntaxChecker = new NumbersSyntaxChecker();
 		syntaxChecker.checkSyntax(words);
+
+        keyWord = words.get(words.size()-1);
 		
 		//Then add them all together to be returned.
-		return computeInteger(words);
+		return computeInteger(words, keyWord);
 	}
 	
 	/**
-	 * Deals with all of the words before the desired value.
-	 * Used for dealing with millions, and thousands all seperately
-	 * @param words The list of words left to deal with.
-	 * @param keyWord The last value to deal with.
+	 * Computes the integer from the list of special words.
+     *
+	 * @param words - the list of words to convert to an integer
 	 * @return The integer corresponding to these words.
 	 */
 	private static int computeInteger(List<SpecialWords> words) {
 		int currentValue = 0;
 		int totalValue = 0;
+
 		//loop through each word, performing the action that is required for that word.
 		for(int i = 0; i < words.size(); i++){
-			SpecialWords currentWord = words.get(i);
-								
+
+            SpecialWords currentWord = words.get(i);
 			if(currentWord.value < 100){
 				currentValue += currentWord.value;
 			}
 			else if(currentWord.value == 100){
 				currentValue *= currentWord.value;
 			}
-			else{
-				totalValue += currentValue;
-				currentValue = 0;
-			}				
+            else if (currentWord.value >= 1000){
+                currentValue *= currentWord.value;
+                totalValue += currentValue;
+                currentValue = 0;
+            }
 		}
-		
+
 		totalValue += currentValue;
 		
 		return totalValue;
-	}	
-	
+	}
+
 	/**
 	 * A method to separate a string into its words.
 	 * @param s The string to separate.
