@@ -3,13 +3,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * Class for converting a string into an integer, if possible.
+ *
+ * @author Henry, Shaun Howard
+ */
 public class Numbers {
 
 	/**
 	 * The primary method of this class, which converts a string to an int.
 	 * @param inputString - the input to convert to an int
-	 * @return the integer representation of the string.
+	 * @return the integer representation of the string
 	 */
 	public static int stringToInteger(String inputString){
 		//Convert everything to lower case so its consistent.
@@ -20,36 +24,34 @@ public class Numbers {
 			return 0;
 		}
 		
-		//We will multiply the final value by this to ensure it handles the negative. Its just reducing complexity.
+		//We will multiply the final value by this to ensure it handles the negative.
 		int negativeMultiplier = 1;
 
-		//Checks if it starts with negative, then removes it
+		//Checks if it string starts with negative, then removes it.
 		if(inputString.startsWith("negative") || inputString.startsWith("minus")){
 			inputString = inputString.replace("negative", "");
             inputString = inputString.replace("minus", "");
 			negativeMultiplier = -1;
 		}
 
-		//If it all works out, send it to the next method.
+		//Send to compute rest of number at this point.
 		return negativeMultiplier * computeInteger(inputString);
 	}
 	
 	/**
 	 * Calls the explode, check syntax, and compute methods.
-	 * @param inputString The string to convert to int.
-	 * @return The integer representation of the string.
+	 * @param inputString - the string to convert to int
+	 * @return the integer representation of the string
 	 */
 	private static int computeInteger(String inputString) {
+        //Gather list of special words from exploding the string.
 		List<SpecialWords> words = explodeString(inputString.trim());
-        SpecialWords keyWord = null;
 		
 		//Check the remaining syntax, to make sure it will not yield strange results.
 		NumbersSyntaxChecker syntaxChecker = new NumbersSyntaxChecker();
 		syntaxChecker.checkSyntax(words);
-
-        keyWord = words.get(words.size()-1);
 		
-		//Then add them all together to be returned.
+		//Computer the actual integer with the checked special words.
 		return computeInteger(words);
 	}
 	
@@ -57,13 +59,13 @@ public class Numbers {
 	 * Computes the integer from the list of special words.
      *
 	 * @param words - the list of words to convert to an integer
-	 * @return The integer corresponding to these words.
+	 * @return the integer corresponding to these words
 	 */
 	private static int computeInteger(List<SpecialWords> words) {
 		int currentValue = 0;
 		int totalValue = 0;
 
-		//loop through each word, performing the action that is required for that word.
+		//Loop through each word, performing the action that is required for that word.
 		for(int i = 0; i < words.size(); i++){
 
             SpecialWords currentWord = words.get(i);
@@ -87,8 +89,10 @@ public class Numbers {
 
 	/**
 	 * A method to separate a string into its words.
-	 * @param s The string to separate.
-	 * @return The words that make up the string.
+     * Gathers the enumerated types of numbers into a list
+     * and returns the enum list.
+	 * @param s - the string to separate
+	 * @return the words that make up the string as enums
 	 */
 	private static List<SpecialWords> explodeString(String s){
         List<String> words = Arrays.asList(s.split(" "));
@@ -102,7 +106,9 @@ public class Numbers {
 	}
 
 	/**
-	 * @param args The phrase to turn into a number.
+     * Turns a string into a number.
+     *
+	 * @param args - the phrase to turn into a number
 	 */
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);

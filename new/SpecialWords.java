@@ -1,4 +1,8 @@
-
+/**
+ * Class for the special number words of the number project.
+ *
+ * @author Henry, Shaun Howard
+ */
 public enum SpecialWords {
 		naught(0), zero(0), one(1), two(2), three(3), four(4), five(5), six(6), seven(7), eight(8), nine(9),
 		ten(10), eleven(11), twelve(12), thirteen(13), fourteen(14), 
@@ -7,7 +11,11 @@ public enum SpecialWords {
 		hundred(100), thousand(1000), million(1000000);
 		
 		public final int value;
-		
+
+        /**
+         * Constructs a new special word from the given value.
+         * @param i - the value of the special word
+         */
 		private SpecialWords(int i){
 			this.value = i;
 		}
