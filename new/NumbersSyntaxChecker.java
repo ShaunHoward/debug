@@ -53,6 +53,31 @@ public class NumbersSyntaxChecker {
      * @param value - the int value to determine the case of
 	 */
 	private void processWord(int value) {
+
+        //Check if over 90 case (100, 1000, 1000000).
+        checkOver90(value);
+
+        //Then we check the ones case.
+        if(value <= 9){
+            onesCase();
+        }
+        //After checking ones, check tens case.
+        else if(value <= 19){
+            teensCase();
+        }
+        //Last we check the n*10 words, where n <= 9, not including 10.
+        else if(value <= 90){
+            ntyCase();
+        }
+	}
+
+    /**
+     * Checks the given value to see if its value
+     * is an over 90 case.
+     *
+     * @param value - value to check if over 90
+     */
+    private void checkOver90(int value){
         //We begin by checking the hundreds case.
         if(value == 100){
             hundredCase();
@@ -65,19 +90,7 @@ public class NumbersSyntaxChecker {
         else if(value == 1000000){
             millionCase();
         }
-        //Then we check the ones case.
-        else if(value <= 9){
-            onesCase();
-        }
-        //After checking ones, check tens case.
-        else if(value <= 19){
-            teensCase();
-        }
-        //Last we check the n*10 words, where n <= 9, not including 10.
-        else if(value <= 90){
-            ntyCase();
-        }
-	}
+    }
 
 	/**
 	 * How to handle the booleans when the word contains a value between 0 and 9.
