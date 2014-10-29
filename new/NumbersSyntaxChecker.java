@@ -1,8 +1,10 @@
 import java.util.List;
 
 /**
- * 
- * @author Henry
+ * Class for checking the syntax of the numbers parsed from the
+ * input number string.
+ *
+ * @author Henry, Shaun Howard
  *
  */
 public class NumbersSyntaxChecker {
@@ -46,30 +48,32 @@ public class NumbersSyntaxChecker {
 	}
 
 	/**
-	 * A method which directs to the correct case method depending on the input value.
+	 * A method which determines a case for the given value.
+     *
+     * @param value - the int value to determine the case of
 	 */
 	private void processWord(int value) {
-        //Next we check if it can be hundred.
+        //We begin by checking the hundreds case.
         if(value == 100){
             hundredCase();
         }
-        //Next we check if it can be 1000
+        //Next we check the thousands case.
         else if(value == 1000){
             thousandCase();
         }
-        //Lastly we check if it can be 1000000
+        //Next we check the millions case.
         else if(value == 1000000){
             millionCase();
         }
-        //First we check the words that just take up the ones place.
+        //Then we check the ones case.
         else if(value <= 9){
             onesCase();
         }
-        //Next we check ten and the teens, as they occupy the tens and ones place.
+        //After checking ones, check tens case.
         else if(value <= 19){
             teensCase();
         }
-        //Next we check the n*10 words. not including 10.
+        //Last we check the n*10 words, where n <= 9, not including 10.
         else if(value <= 90){
             ntyCase();
         }
@@ -121,7 +125,7 @@ public class NumbersSyntaxChecker {
 	 * How to handle the booleans when the word contains the value of 100.
 	 */
 	private void hundredCase() {
-		//Tens and ones can go after 100 always, so i set those to true.
+		//Tens and ones can go after 100 always, so set those to true.
 		if(canBeHundreds && doesntHaveHundred){
 			canBeHundreds = false;
 			doesntHaveHundred = false;
@@ -158,6 +162,7 @@ public class NumbersSyntaxChecker {
 	private void millionCase() {
 		//It pretty much resets it, but no more millions.
 		if(canBeMultiplier && doesntHaveMillion){
+            //Thousands do not exist at this point.
 			doesntHaveThousand = true;
 			doesntHaveMillion = false;
 			doesntHaveHundred = true;
