@@ -25,6 +25,7 @@ public class NumbersError {
     }
 
     private static void checkMultipleHundreds(String value) {
+        int hundCount = 0;
     }
 
     /**

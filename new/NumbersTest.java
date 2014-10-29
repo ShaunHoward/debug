@@ -205,7 +205,7 @@ public class NumbersTest {
                 "twenty thirty", "forty ninty", "sixty fifty", //ntys followed by ntys.
                 "hundred", "hundred nine", "hundred sixteen", "hundred forty", //No modifier to hundred.
 //                "twelve hundred", "forty hundred", "seventy seven hundred", //2 digit prefix before hundred
-                "one hundred hundred", "eight hundred four hundred nineteen", //two hundreds
+//                "one hundred hundred", "eight hundred four hundred nineteen", //two hundreds
                 "thousand one", "thousand eighteen", "thousand twenty four",  //no prefix to thousands
                 "one thousand fifty million", "twelve thousand ninteen million three",
                 "eighty thousand four hundred nine million", "one hundred thousand million", //Thousand before million
