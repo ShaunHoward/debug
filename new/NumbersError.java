@@ -104,6 +104,10 @@ public class NumbersError {
         checkAdjacentValues(enums, 19, 90);
         //Check hundred modifier.
         checkHundredModifier(enums);
+        //Check thousand modifier.
+        //Check million modifier.
+        //Check thousand - million
+        
     }
 
     /**
@@ -113,7 +117,43 @@ public class NumbersError {
      * @param enums - the enums to check if hundred has a modifier in
      */
     public static void checkHundredModifier(List<SpecialWords> enums) {
+        boolean hadHundred = false;
+        for (int i = enums.size() - 1; i >= 0; i--) {
+            if (enums.get(i).value == 100){
+                hadHundred = true;
+            } else if (hadHundred && !isInRange(enums.get(i).value, 0, 9)) {
+                throw new IllegalArgumentException("Need proper hundreds modifier.");
+            } else {
+                hadHundred = false;
+            }
+        }
+        throwExceptionWhenTrue(hadHundred);
+    }
 
+    /**
+     * Throws an exception when the given boolean is true.
+     *
+     * @param boolToCheck - the boolean to check
+     */
+    private static void throwExceptionWhenTrue(boolean boolToCheck) {
+        if (boolToCheck){
+            throw new IllegalArgumentException("Improper modifier on number.");
+        }
+    }
+
+    /**
+     * Checks if the given value is in the selected range.
+     *
+     * @param value - value to range check
+     * @param start - start of range
+     * @param end - end of range
+     * @return whether the value is in the given range
+     */
+    public static boolean isInRange(int value, int start, int end){
+        if (start < value && value <= end) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -147,7 +187,7 @@ public class NumbersError {
     public static void checkAdjacentValues(List<SpecialWords> enums, int rangeStart, int rangeEnd){
         boolean hadValue = false;
         for (SpecialWords word: enums){
-            if (word.value > rangeStart && word.value <= rangeEnd){
+            if (isInRange(word.value, rangeStart, rangeEnd)){
                 if (hadValue) {
                     throw new IllegalArgumentException("Cannot have adjacent values.");
                 }
