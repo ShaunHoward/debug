@@ -58,7 +58,7 @@ public class NumbersSyntaxChecker {
             thousandCase();
         }
         //Lastly we check if it can be 1000000
-        else if(value == 100000){
+        else if(value == 1000000){
             millionCase();
         }
         //First we check the words that just take up the ones place.

@@ -5,10 +5,11 @@ import java.util.Scanner;
 
 
 public class Numbers {
+
 	/**
 	 * The primary method of this class, which converts a string to an int.
-	 * @param inputString The input to convert to an int.
-	 * @return The integer representation of the string.
+	 * @param inputString - the input to convert to an int
+	 * @return the integer representation of the string.
 	 */
 	public static int stringToInteger(String inputString){
 		//Convert everything to lower case so its consistent.
@@ -21,6 +22,7 @@ public class Numbers {
 		
 		//We will multiply the final value by this to ensure it handles the negative. Its just reducing complexity.
 		int negativeMultiplier = 0;
+
 		//Checks if it starts with negative, then removes it
 		if(inputString.startsWith("negative")){
 			inputString = inputString.replaceFirst("negative", "");
@@ -51,7 +53,7 @@ public class Numbers {
         keyWord = words.get(words.size()-1);
 		
 		//Then add them all together to be returned.
-		return computeInteger(words, keyWord);
+		return computeInteger(words);
 	}
 	
 	/**
