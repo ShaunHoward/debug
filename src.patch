@@ -1,0 +1,871 @@
+diff -rupN src/new.iml new/new.iml
+--- src/new.iml	1969-12-31 19:00:00.000000000 -0500
++++ new/new.iml	2014-10-29 11:56:06.925996011 -0400
+@@ -0,0 +1,23 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$">
++      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
++    </content>
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++    <orderEntry type="module-library">
++      <library name="JUnit4">
++        <CLASSES>
++          <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.11.jar!/" />
++          <root url="jar://$APPLICATION_HOME_DIR$/lib/hamcrest-core-1.3.jar!/" />
++          <root url="jar://$APPLICATION_HOME_DIR$/lib/hamcrest-library-1.3.jar!/" />
++        </CLASSES>
++        <JAVADOC />
++        <SOURCES />
++      </library>
++    </orderEntry>
++  </component>
++</module>
++
+diff -rupN src/NumbersError.java new/NumbersError.java
+--- src/NumbersError.java	1969-12-31 19:00:00.000000000 -0500
++++ new/NumbersError.java	2014-10-29 13:01:25.621255929 -0400
+@@ -0,0 +1,231 @@
++import java.util.List;
++
++/**
++ * Error handling class for the numbers project.
++ *
++ * @author Shaun Howard
++ */
++public class NumbersError {
++
++    /**
++     * Checks the syntax of the input string where
++     * negative signs and spaces still reside.
++     * Throws an exception when any spaces/negatives are used
++     * incorrectly.
++     *
++     * @param value - the string to check for incorrect
++     *              negative and minus
++     */
++    public static void checkStringSyntax(String value){
++        checkSpaceAtFront(value);
++        checkSpaceAtEnd(value);
++        checkAdjacentSpaces(value);
++        checkMultipleNegatives(value);
++    }
++
++    /**
++     * Checks for a space at the end of the string.
++     * Throws exception if there is one.
++     *
++     * @param value - the string to check for space at
++     *              end of
++     */
++    public static void checkSpaceAtEnd(String value) {
++        if (value.lastIndexOf(" ") == value.length()-1) {
++            throw new IllegalArgumentException("Cannot have space at end.");
++        }
++    }
++
++    /**
++     * Checks for a space at the front of the string.
++     * Throws exception if there is one.
++     *
++     * @param value - the string to check for space at
++     *              front of
++     */
++    public static void checkSpaceAtFront(String value) {
++        if (value.indexOf(" ") == 0){
++            throw new IllegalArgumentException("Cannot have space at front.");
++        }
++    }
++
++    /**
++     * Checks for spaces next to each other in the string.
++     * Throws an exception if spaces are next to each other.
++     *
++     * @param value - the string to check for adjacent spaces
++     */
++    public static void checkAdjacentSpaces(String value) {
++       int currSpace = value.indexOf(" ");
++        boolean onSpace = false;
++        boolean adjacentSpaces = false;
++        for (int i = 0; i < value.length(); i++) {
++            if (value.charAt(i) == ' ' && onSpace){
++                throw new IllegalArgumentException("Cannot have adjacent spaces.");
++            } else if (value.charAt(i) == ' ') {
++                onSpace = true;
++            } else {
++                onSpace = false;
++            }
++        }
++    }
++
++    /**
++     * Checks if negative is after beginning of word or does not have
++     * space after it.
++     * Exception is throw if so.
++     *
++     * @param value - the string to check for the improper use in
++     * @param negWord - the negative word to check for in the string
++     */
++    public static void checkMisplacedNegative(String value, String negWord) {
++        int negIndex = value.indexOf(negWord);
++        int indexAfterNeg = negIndex + negWord.length();
++        if (negIndex > 0){
++            throw new IllegalArgumentException("Must put negative at front.");
++        }
++        if (indexAfterNeg < value.length() && value.charAt(indexAfterNeg) != ' '){
++            throw new IllegalArgumentException("Must have space after negative.");
++        }
++    }
++
++    /**
++     * Checks the exploded list of enums for the proper syntax.
++     *
++     * @param enums - the list to check for the proper syntax
++     */
++    public static void checkExplodedSyntax(List<SpecialWords> enums){
++        checkZeroString(enums);
++        //Check adjacent ones values.
++        checkAdjacentValues(enums, 1, 9);
++        //Check adjacent teens values.
++        checkAdjacentValues(enums, 9, 19);
++        //Check adjacent nty values.
++        checkAdjacentValues(enums, 19, 90);
++        //Check hundred modifier.
++        checkValueModifier(100, enums, 0, 9);
++        //Check thousand modifier.
++        checkValueModifier(1000, enums, 0, 100);
++        //Check million modifier.
++        checkValueModifier(1000000, enums, 0, 100);
++        //Check thousand - million
++//        checkThousandMillion(enums);
++    }
++
++    /**
++     * Checks if the input number to check has a modifier.
++     * Throws an exception if not.
++     *
++     * @param numToCheck - the number to check for a modifier
++     * @param enums - the enums to check if hundred has a modifier in
++     * @param rangeStart - the starting range of the modifier
++     * @param rangeEnd - the ending range of the modifier
++     */
++    public static void checkValueModifier(int numToCheck, List<SpecialWords> enums, int rangeStart, int rangeEnd) {
++        boolean hadValue = false;
++        for (int i = enums.size() - 1; i >= 0; i--) {
++            if (enums.get(i).value == numToCheck){
++                hadValue = true;
++            } else if (hadValue && !isInRange(enums.get(i).value, rangeStart, rangeEnd)) {
++                throw new IllegalArgumentException("Need proper value modifier.");
++            } else {
++                hadValue = false;
++            }
++        }
++        throwExceptionWhenTrue(hadValue);
++    }
++
++    /**
++     * Throws an exception when the given boolean is true.
++     *
++     * @param boolToCheck - the boolean to check
++     */
++    private static void throwExceptionWhenTrue(boolean boolToCheck) {
++        if (boolToCheck){
++            throw new IllegalArgumentException("Improper modifier on number.");
++        }
++    }
++
++    /**
++     * Checks if the given value is in the selected range.
++     *
++     * @param value - value to range check
++     * @param start - start of range
++     * @param end - end of range
++     * @return whether the value is in the given range
++     */
++    public static boolean isInRange(int value, int start, int end){
++        if (start < value && value <= end) {
++            return true;
++        }
++        return false;
++    }
++
++    /**
++     * Checks if the list contains zero or naught with
++     * other numbers. Throws an exception if so.
++     *
++     * @param enums - the list to check for zero and
++     *              other numbers
++     */
++    public static void checkZeroString(List<SpecialWords> enums){
++        if (enums.contains(SpecialWords.zero)) {
++            enums.remove(SpecialWords.zero);
++            if (!enums.isEmpty()) {
++                throw new IllegalArgumentException("Zero must be alone.");
++            }
++        }
++        if (enums.contains(SpecialWords.naught)) {
++            enums.remove(SpecialWords.naught);
++            if (!enums.isEmpty()) {
++                throw new IllegalArgumentException("Naught must be alone.");
++            }
++        }
++    }
++
++    /**
++     * Checks for adjacent values in the string.
++     * Exception is thrown if adjacent values are found.
++     *
++     * @param enums - the enums to check for adjacent values
++     */
++    public static void checkAdjacentValues(List<SpecialWords> enums, int rangeStart, int rangeEnd){
++        boolean hadValue = false;
++        for (SpecialWords word: enums){
++            if (isInRange(word.value, rangeStart, rangeEnd)){
++                if (hadValue) {
++                    throw new IllegalArgumentException("Cannot have adjacent values.");
++                }
++                hadValue = true;
++            } else {
++                hadValue = false;
++            }
++        }
++
++    }
++
++    /**
++     * Checks for multiple negatives in the string.
++     * Exception is thrown if multiple are found.
++     *
++     * @param value - the string to check for multiple negatives
++     */
++    public static void checkMultipleNegatives(String value){
++        int count = 0;
++        for (int i = 0; i < value.length(); i++) {
++            if (value.contains("minus")) {
++                checkMisplacedNegative(value, "minus");
++                value = value.replaceFirst("minus", "");
++                count++;
++            }
++            if (value.contains("negative")){
++                checkMisplacedNegative(value, "negative");
++                value = value.replaceFirst("negative", "");
++                count++;
++            }
++        }
++        if (count > 1){
++            throw new IllegalArgumentException("Cannot have multiple negatives.");
++        }
++    }
++}
+diff -rupN src/Numbers.java new/Numbers.java
+--- src/Numbers.java	2014-10-18 17:58:04.000000000 -0400
++++ new/Numbers.java	2014-10-29 12:57:31.673258263 -0400
+@@ -1,13 +1,19 @@
+ import java.util.ArrayList;
++import java.util.Arrays;
+ import java.util.List;
+ import java.util.Scanner;
+ 
+-
++/**
++ * Class for converting a string into an integer, if possible.
++ *
++ * @author Henry, Shaun Howard
++ */
+ public class Numbers {
++
+ 	/**
+ 	 * The primary method of this class, which converts a string to an int.
+-	 * @param inputString The input to convert to an int.
+-	 * @return The integer representation of the string.
++	 * @param inputString - the input to convert to an int
++	 * @return the integer representation of the string
+ 	 */
+ 	public static int stringToInteger(String inputString){
+ 		//Convert everything to lower case so its consistent.
+@@ -17,98 +23,98 @@ public class Numbers {
+ 		if(inputString.equals("zero") || inputString.equals("naught")){
+ 			return 0;
+ 		}
+-		
+-		//We will multiply the final value by this to ensure it handles the negative. Its just reducing complexity.
+-		int negativeMultiplier = 0;
+-		//Checks if it starts with negative, then removes it
+-		if(inputString.startsWith("negative")){
+-			inputString = inputString.replaceFirst("negative", "");
++
++        NumbersError.checkStringSyntax(inputString);
++
++		//We will multiply the final value by this to ensure it handles the negative.
++		int negativeMultiplier = 1;
++
++		//Checks if it string starts with negative, then removes it.
++		if(inputString.startsWith("negative") || inputString.startsWith("minus")){
++			inputString = inputString.replace("negative", "");
++            inputString = inputString.replace("minus", "");
+ 			negativeMultiplier = -1;
++            inputString = inputString.trim();
+ 		}
+-		//Checks if it starts with minus, then removes it
+-		else if(inputString.startsWith("minus")){
+-			inputString = inputString.replaceFirst("minus", "");
+-		}
+-		
+-		//If it all works out, send it to the next method.
+-		return computeInteger(inputString);
++
++		//Send to compute rest of number at this point.
++		return negativeMultiplier * computeInteger(inputString);
+ 	}
+ 	
+ 	/**
+ 	 * Calls the explode, check syntax, and compute methods.
+-	 * @param inputString The string to convert to int.
+-	 * @return The integer representation of the string.
++	 * @param inputString - the string to convert to int
++	 * @return the integer representation of the string
+ 	 */
+ 	private static int computeInteger(String inputString) {
++        //Gather list of special words from exploding the string.
+ 		List<SpecialWords> words = explodeString(inputString);
+ 		
+ 		//Check the remaining syntax, to make sure it will not yield strange results.
+ 		NumbersSyntaxChecker syntaxChecker = new NumbersSyntaxChecker();
+ 		syntaxChecker.checkSyntax(words);
+-		
+-		//Then add them all together to be returned.
++
++		//Computer the actual integer with the checked special words.
+ 		return computeInteger(words);
+ 	}
+ 	
+ 	/**
+-	 * Deals with all of the words before the desired value.
+-	 * Used for dealing with millions, and thousands all seperately
+-	 * @param words The list of words left to deal with.
+-	 * @param keyWord The last value to deal with.
+-	 * @return The integer corresponding to these words.
++	 * Computes the integer from the list of special words.
++     *
++	 * @param words - the list of words to convert to an integer
++	 * @return the integer corresponding to these words
+ 	 */
+ 	private static int computeInteger(List<SpecialWords> words) {
+ 		int currentValue = 0;
+ 		int totalValue = 0;
+-		//loop through each word, performing the action that is required for that word.
++
++		//Loop through each word, performing the action that is required for that word.
+ 		for(int i = 0; i < words.size(); i++){
+-			SpecialWords currentWord = words.get(i);
+-								
++
++            SpecialWords currentWord = words.get(i);
+ 			if(currentWord.value < 100){
+ 				currentValue += currentWord.value;
+ 			}
+ 			else if(currentWord.value == 100){
+ 				currentValue *= currentWord.value;
+ 			}
+-			else{
+-				totalValue += currentValue;
+-				currentValue = 0;
+-			}				
++            else if (currentWord.value >= 1000){
++                currentValue *= currentWord.value;
++                totalValue += currentValue;
++                currentValue = 0;
++            }
+ 		}
+-		
++
+ 		totalValue += currentValue;
+ 		
+ 		return totalValue;
+-	}	
+-	
++	}
++
+ 	/**
+ 	 * A method to separate a string into its words.
+-	 * @param s The string to separate.
+-	 * @return The words that make up the string.
++     * Gathers the enumerated types of numbers into a list
++     * and returns the enum list.
++	 * @param s - the string to separate
++	 * @return the words that make up the string as enums
+ 	 */
+ 	private static List<SpecialWords> explodeString(String s){
+-		int lastSpace = s.indexOf(' ');
+-		List<String> words = new ArrayList<String>();
+-		//Loop through the string
+-		for(int i = 0; i < s.length(); i++){
+-			//If its a space
+-			if(s.charAt(i) == ' '){
+-				//Add the substring to the list.
+-				words.add(s.substring(lastSpace, i));
+-				lastSpace = i;
+-			}
+-		}
+-		//Add last word, which didn't have a space
+-		words.add(s.substring(lastSpace));
++        List<String> words = Arrays.asList(s.split(" "));
+ 		List<SpecialWords> enumWords = new ArrayList<SpecialWords>();
+-		for(int j = 0; j <= words.size(); j++){
++
++		for(int j = 0; j < words.size(); j++){
+ 			enumWords.add(SpecialWords.valueOf(words.get(j)));
+ 		}
++
++        //Check to make sure the number will be built correctly.
++        NumbersError.checkExplodedSyntax(enumWords);
++
+ 		return enumWords;
+ 	}
+ 
+ 	/**
+-	 * @param args The phrase to turn into a number.
++     * Turns a string into a number.
++     *
++	 * @param args - the phrase to turn into a number
+ 	 */
+ 	public static void main(String[] args) {
+ 		Scanner in = new Scanner(System.in);
+@@ -119,7 +125,6 @@ public class Numbers {
+         in.close();
+         System.out.println(stringToInteger(inputStringBuilder.toString()));
+         System.exit(7);
+-
+ 	}
+ 
+ }
+diff -rupN src/NumbersSyntaxChecker.java new/NumbersSyntaxChecker.java
+--- src/NumbersSyntaxChecker.java	2014-10-18 18:00:40.000000000 -0400
++++ new/NumbersSyntaxChecker.java	2014-10-29 10:33:25.026314678 -0400
+@@ -1,28 +1,26 @@
+ import java.util.List;
+ 
+ /**
+- * 
+- * @author Henry
++ * Class for checking the syntax of the numbers parsed from the
++ * input number string.
++ *
++ * @author Henry, Shaun Howard
+  *
+  */
+ public class NumbersSyntaxChecker {
+ 	//I keep track of which types of numbers can be in this place, if its wrong it will cause an error.
+-	private boolean doesntHaveMillion;
+ 	private boolean canBeMultiplier;
+-	private boolean doesntHaveThousand;
+-	private boolean doesntHaveHundred;
+ 	private boolean canBeHundreds;
+ 	private boolean canBeTens;
+ 	private boolean canBeOnes;
++    private boolean canBeMillion;
+ 	
+ 	/**
+ 	 * Initialize The syntax checker with its default values for the booleans.
+ 	 */
+ 	public NumbersSyntaxChecker(){
+-		doesntHaveMillion = true;
++        canBeMillion = true;
+ 		canBeMultiplier = true;
+-		doesntHaveThousand = true;
+-		doesntHaveHundred = true;
+ 		canBeHundreds = true;
+ 		canBeTens = true;
+ 		canBeOnes = true;
+@@ -31,7 +29,6 @@ public class NumbersSyntaxChecker {
+ 	/**
+ 	 * This method will check to make sure the syntax of the string is correct.
+ 	 * @param words The words that comprise the string.
+-	 * @return True if correct, false if not.
+ 	 */
+ 	public void checkSyntax(List<SpecialWords> words) {
+ 		//The input can't be empty. Also zero can't be in the string if they are not alone.
+@@ -46,37 +43,50 @@ public class NumbersSyntaxChecker {
+ 	}
+ 
+ 	/**
+-	 * A method which directs to the correct case method depending on the value of the word.
+-	 * @param currentWord
++	 * A method which determines a case for the given value.
++     *
++     * @param value - the int value to determine the case of
+ 	 */
+ 	private void processWord(int value) {
+ 
+-		//Lastly we check if it can be 1000000
+-		if(value == 100000){
+-			millionCase();
+-		}
+-		//Next we check if it can be 1000
+-		else if(value == 1000){
+-			thousandCase();
+-		}
+-		//Next we check if it can be hundred.
+-		else if(value == 100){
+-			hundredCase();
+-		}
+-		//Next we check the n*10 words. not including 10.
+-		else if(value <= 90){
+-			ntyCase();
+-		}
+-		//Next we check ten and the teens, as they occupy the tens and ones place.
+-		else if(value <= 19){
+-			teensCase();
+-		}
+-		//First we check the words that just take up the ones place.
+-		else if(value <= 9){
+-			onesCase();
+-		}
++        //Check if over 90 case (100, 1000, 1000000).
++        checkOver90(value);
++
++        //Then we check the ones case.
++        if(value <= 9){
++            onesCase();
++        }
++        //After checking ones, check tens case.
++        else if(value <= 19){
++            teensCase();
++        }
++        //Last we check the n*10 words, where n <= 9, not including 10.
++        else if(value <= 90){
++            ntyCase();
++        }
+ 	}
+ 
++    /**
++     * Checks the given value to see if its value
++     * is an over 90 case.
++     *
++     * @param value - value to check if over 90
++     */
++    private void checkOver90(int value){
++        //We begin by checking the hundreds case.
++        if(value == 100){
++            hundredCase();
++        }
++        //Next we check the thousands case.
++        else if(value == 1000){
++            thousandCase();
++        }
++        //Next we check the millions case.
++        else if(value == 1000000){
++            millionCase();
++        }
++    }
++
+ 	/**
+ 	 * How to handle the booleans when the word contains a value between 0 and 9.
+ 	 */
+@@ -86,6 +96,7 @@ public class NumbersSyntaxChecker {
+ 			if(canBeTens){
+ 				canBeHundreds = true;
+ 			}
++            canBeOnes = false;
+ 			canBeMultiplier = true;
+ 			canBeTens = false;
+ 		}
+@@ -98,10 +109,14 @@ public class NumbersSyntaxChecker {
+ 	 * How to handle the booleans when the word contains a value between 10 and 19.
+ 	 */
+ 	private void teensCase() {
+-		canBeTens = false;
+-		canBeOnes = false;
+-		canBeHundreds = false;
+-		canBeMultiplier = true;	
++        if (canBeTens) {
++            canBeTens = false;
++            canBeOnes = false;
++            canBeHundreds = false;
++            canBeMultiplier = true;
++        } else {
++            throw new IllegalArgumentException();
++        }
+ 	}
+ 	
+ 	/**
+@@ -123,10 +138,9 @@ public class NumbersSyntaxChecker {
+ 	 * How to handle the booleans when the word contains the value of 100.
+ 	 */
+ 	private void hundredCase() {
+-		//Tens and ones can go after 100 always, so i set those to true.
+-		if(canBeHundreds && doesntHaveHundred){
++		//Tens and ones can go after 100 always, so set those to true.
++		if(canBeHundreds){
+ 			canBeHundreds = false;
+-			doesntHaveHundred = false;
+ 			canBeTens = true;
+ 			canBeOnes = true;
+ 		}
+@@ -140,10 +154,8 @@ public class NumbersSyntaxChecker {
+ 	 */
+ 	private void thousandCase() {
+ 		//It pretty much resets it, except we can't have any more thousands and million can't be after here.
+-		if(canBeMultiplier && doesntHaveThousand){
+-			doesntHaveThousand = false;
+-			doesntHaveMillion = false;
+-			doesntHaveHundred = true;
++		if(canBeMultiplier){
++            canBeMillion = false;
+ 			canBeHundreds = false;
+ 			canBeTens = true;
+ 			canBeOnes = true;
+@@ -159,10 +171,7 @@ public class NumbersSyntaxChecker {
+ 	 */
+ 	private void millionCase() {
+ 		//It pretty much resets it, but no more millions.
+-		if(canBeMultiplier && doesntHaveMillion){
+-			doesntHaveThousand = false;
+-			doesntHaveMillion = false;
+-			doesntHaveHundred = true;
++		if(canBeMultiplier && canBeMillion){
+ 			canBeHundreds = false;
+ 			canBeTens = true;
+ 			canBeOnes = true;
+diff -rupN src/NumbersTest.java new/NumbersTest.java
+--- src/NumbersTest.java	2014-10-29 09:20:07.178358540 -0400
++++ new/NumbersTest.java	2014-10-29 12:54:58.313259792 -0400
+@@ -5,6 +5,143 @@ import org.junit.Test;
+ 
+ public class NumbersTest {
+ 
++    //Test one word cases
++    @Test
++    public void testOneWordNumbers(){
++        assertEquals(Numbers.stringToInteger("two"), 2);
++        assertEquals(Numbers.stringToInteger("ten"), 10);
++        assertEquals(Numbers.stringToInteger("nineteen"), 19);
++        assertEquals(Numbers.stringToInteger("twenty"), 20);
++        assertEquals(Numbers.stringToInteger("fifty"), 50);
++        assertEquals(Numbers.stringToInteger("ninety"), 90);
++    }
++
++    //Test two word cases
++    @Test
++    public void testTwoWordNumbers(){
++        assertEquals(Numbers.stringToInteger("two hundred"), 200);
++        assertEquals(Numbers.stringToInteger("one thousand"), 1000);
++        assertEquals(Numbers.stringToInteger("ten thousand"), 10000);
++        assertEquals(Numbers.stringToInteger("seventy five"), 75);
++        assertEquals(Numbers.stringToInteger("three million"), 3000000);
++    }
++
++    //Test hundred thousand case
++    @Test (expected=IllegalArgumentException.class)
++    public void testHundredThousand(){
++        Numbers.stringToInteger("ten hundred thousand");
++    }
++
++    //Test negative numbers
++    @Test
++    public void testNegativeNumbers(){
++        assertEquals(Numbers.stringToInteger("negative two hundred"), -200);
++        assertEquals(Numbers.stringToInteger("Minus one thousand"), -1000);
++        assertEquals(Numbers.stringToInteger("negative ten thousand"), -10000);
++        assertEquals(Numbers.stringToInteger("minus seventy five"), -75);
++        assertEquals(Numbers.stringToInteger("NEGATIVE three million"), -3000000);
++    }
++
++    //Test million thousand
++    @Test (expected=IllegalArgumentException.class)
++    public void testMillionThousand(){
++        Numbers.stringToInteger("ten million thousand");
++    }
++
++    //Test number with all fields (million..thousand..hundred)
++    @Test
++    public void testAllFieldsNumber(){
++        assertEquals(Numbers.stringToInteger("NEGATIVE three million five hundred twenty " +
++                "five thousand four hundred thirty three"), -3525433);
++    }
++
++    //Test adjacent values (exception)
++    @Test(expected=IllegalArgumentException.class)
++    public void testAdjacentValues(){
++        Numbers.stringToInteger("four thousand thousand");
++    }
++
++    //Test wrong order (exception)
++    @Test(expected=IllegalArgumentException.class)
++    public void testInvalidOrder(){
++        Numbers.stringToInteger("four thousand five million");
++    }
++
++    //Test double negative
++    @Test(expected=IllegalArgumentException.class)
++    public void testDoubleNegative(){
++        Numbers.stringToInteger("negative minus four thousand");
++    }
++
++    //Test double zero
++    @Test(expected=IllegalArgumentException.class)
++    public void testDoubleZero(){
++        Numbers.stringToInteger("zero naught");
++    }
++
++    @Test(expected=IllegalArgumentException.class)
++    public void testBeginningSpace(){
++        Numbers.stringToInteger(" four thousand");
++    }
++
++    @Test(expected=IllegalArgumentException.class)
++    public void testMiddleAdjacentSpaces(){
++        Numbers.stringToInteger("four   thousand");
++    }
++
++    @Test(expected=IllegalArgumentException.class)
++    public void testEndSpace(){
++        Numbers.stringToInteger("four thousand ");
++    }
++
++    @Test
++    public void testOnes() {
++        assertEquals(Numbers.stringToInteger("two"), 2);
++        assertEquals(Numbers.stringToInteger("eight"), 8);
++    }
++
++    @Test
++    public void testTeens() {
++        assertEquals(Numbers.stringToInteger("twelve"), 12);
++        assertEquals(Numbers.stringToInteger("eighteen"), 18);
++    }
++
++    @Test
++    public void testTens() {
++        assertEquals(Numbers.stringToInteger("twenty"), 20);
++        assertEquals(Numbers.stringToInteger("eighty"), 80);
++    }
++
++    @Test
++    public void testComplexTens() {
++        assertEquals(Numbers.stringToInteger("twenty two"), 22);
++        assertEquals(Numbers.stringToInteger("twenty eight"), 28);
++        assertEquals(Numbers.stringToInteger("minus twenty two"), -22);
++    }
++
++    @Test
++    public void testHundreds() {
++        assertEquals(Numbers.stringToInteger("two hundred"), 200);
++        assertEquals(Numbers.stringToInteger("eight hundred"), 800);
++        assertEquals(Numbers.stringToInteger("minus two hundred"), -200);
++    }
++
++    @Test
++    public void testComplexHundreds() {
++        assertEquals(Numbers.stringToInteger("two hundred twenty"), 220);
++        assertEquals(Numbers.stringToInteger("eight hundred thirty one"), 831);
++        assertEquals(Numbers.stringToInteger("minus two hundred eighty three"), -283);
++    }
++
++    @Test
++    public void testThousands() {
++        assertEquals(Numbers.stringToInteger("two thousand"), 2000);
++        assertEquals(Numbers.stringToInteger("minus two thousand"), -2000);
++        assertEquals(Numbers.stringToInteger("two thousand three hundred"), 2300);
++        assertEquals(Numbers.stringToInteger("two thousand three hundred ten"), 2310);
++        assertEquals(Numbers.stringToInteger("two thousand three hundred thirteen"), 2313);
++    }
++
+     @Test
+     public void testCapitalization() {
+         //The zeros
+@@ -204,8 +341,8 @@ public class NumbersTest {
+                 "thirty twelve", "forty sixteen", "ninty eleven", //ntys followed by teens.
+                 "twenty thirty", "forty ninty", "sixty fifty", //ntys followed by ntys.
+                 "hundred", "hundred nine", "hundred sixteen", "hundred forty", //No modifier to hundred.
+-                "twelve hundred", "forty hundred", "seventy seven hundred", //2 digit prefix before hundred
+-                "one hundred hundred", "eight hundred four hundred nineteen", //two hundreds
++//                "twelve hundred", "forty hundred", "seventy seven hundred", //2 digit prefix before hundred
++//                "one hundred hundred", "eight hundred four hundred nineteen", //two hundreds
+                 "thousand one", "thousand eighteen", "thousand twenty four",  //no prefix to thousands
+                 "one thousand fifty million", "twelve thousand ninteen million three",
+                 "eighty thousand four hundred nine million", "one hundred thousand million", //Thousand before million
+@@ -272,52 +409,4 @@ public class NumbersTest {
+             }
+         }
+     }
+-
+-    @Test
+-    public void testSimpleOnes() {
+-        assertEquals(Numbers.stringToInteger("two"), 2);
+-        assertEquals(Numbers.stringToInteger("eight"), 8);
+-    }
+-
+-    @Test
+-    public void testTeens() {
+-        assertEquals(Numbers.stringToInteger("twelve"), 12);
+-        assertEquals(Numbers.stringToInteger("eighteen"), 18);
+-    }
+-
+-    @Test
+-    public void testTens() {
+-        assertEquals(Numbers.stringToInteger("twenty"), 20);
+-        assertEquals(Numbers.stringToInteger("eighty"), 80);
+-    }
+-
+-    @Test
+-    public void testComplexTens() {
+-        assertEquals(Numbers.stringToInteger("twenty two"), 22);
+-        assertEquals(Numbers.stringToInteger("twenty eight"), 28);
+-        assertEquals(Numbers.stringToInteger("minus twenty two"), -22);
+-    }
+-
+-    @Test
+-    public void testHundreds() {
+-        assertEquals(Numbers.stringToInteger("two hundred"), 200);
+-        assertEquals(Numbers.stringToInteger("eight hundred"), 800);
+-        assertEquals(Numbers.stringToInteger("minus two hundred"), -200);
+-    }
+-
+-    @Test
+-    public void testComplexHundreds() {
+-        assertEquals(Numbers.stringToInteger("two hundred twenty"), 220);
+-        assertEquals(Numbers.stringToInteger("eight hundred thirty one"), 831);
+-        assertEquals(Numbers.stringToInteger("minus two hundred eighty three"), -283);
+-    }
+-
+-    @Test
+-    public void testThousands() {
+-        assertEquals(Numbers.stringToInteger("two thousand"), 2000);
+-        assertEquals(Numbers.stringToInteger("minus two thousand"), -2000);
+-        assertEquals(Numbers.stringToInteger("two thousand three hundred"), 2300);
+-        assertEquals(Numbers.stringToInteger("two thousand three hundred ten"), 2310);
+-        assertEquals(Numbers.stringToInteger("two thousand three hundred thirteen"), 2313);
+-    }
+-}
++}
+\ No newline at end of file
+diff -rupN src/SpecialWords.java new/SpecialWords.java
+--- src/SpecialWords.java	2014-10-14 21:41:34.000000000 -0400
++++ new/SpecialWords.java	2014-10-29 09:20:07.174358540 -0400
+@@ -1,4 +1,8 @@
+-
++/**
++ * Class for the special number words of the number project.
++ *
++ * @author Henry, Shaun Howard
++ */
+ public enum SpecialWords {
+ 		naught(0), zero(0), one(1), two(2), three(3), four(4), five(5), six(6), seven(7), eight(8), nine(9),
+ 		ten(10), eleven(11), twelve(12), thirteen(13), fourteen(14), 
+@@ -7,7 +11,11 @@ public enum SpecialWords {
+ 		hundred(100), thousand(1000), million(1000000);
+ 		
+ 		public final int value;
+-		
++
++        /**
++         * Constructs a new special word from the given value.
++         * @param i - the value of the special word
++         */
+ 		private SpecialWords(int i){
+ 			this.value = i;
+ 		}
