@@ -20,6 +20,8 @@ The differentiation between these classes is determining if the number is in the
 whether the input given was bad input (Error). Things like doubles are checked in the Error class. Things like order of
 numbering and places are checked in the SyntaxChecker class.
 
+New code is in "new" folder. Patch is in repo.
+
 Defects found include incorrect processing of:
 One word numbers
 Two word numbers
