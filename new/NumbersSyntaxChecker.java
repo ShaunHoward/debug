@@ -158,7 +158,7 @@ public class NumbersSyntaxChecker {
 	private void millionCase() {
 		//It pretty much resets it, but no more millions.
 		if(canBeMultiplier && doesntHaveMillion){
-			doesntHaveThousand = false;
+			doesntHaveThousand = true;
 			doesntHaveMillion = false;
 			doesntHaveHundred = true;
 			canBeHundreds = false;
