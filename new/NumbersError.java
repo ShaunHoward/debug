@@ -7,6 +7,15 @@ import java.util.List;
  */
 public class NumbersError {
 
+    /**
+     * Checks the syntax of the input string where
+     * negative signs and spaces still reside. Throws
+     * an exception when any spaces/negatives are used
+     * incorrectly.
+     *
+     * @param value - the string to check for incorrect
+     *              negative or space usage
+     */
     public static void checkStringSyntax(String value){
         checkSpaceAtFront(value);
         checkSpaceAtEnd(value);
@@ -14,20 +23,45 @@ public class NumbersError {
         checkMultipleNegatives(value);
     }
 
+    /**
+     * Checks for a space at the end of the string.
+     * Throws exception if there is one.
+     *
+     * @param value - the string to check for space at
+     *              end of
+     */
     private static void checkSpaceAtEnd(String value) {
+        if (value.lastIndexOf(" ") == value.length()-1) {
+            throw new IllegalArgumentException("Cannot have space at end.");
+        }
     }
 
+    /**
+     * Checks for a space at the front of the string.
+     * Throws exception if there is one.
+     *
+     * @param value - the string to check for space at
+     *              front of
+     */
     private static void checkSpaceAtFront(String value) {
-
+        if (value.indexOf(" ") == 0){
+            throw new IllegalArgumentException("Cannot have space at front.");
+        }
     }
 
+    /**
+     * Checks for spaces next to each other in the string.
+     * Throws an exception if spaces are next to each other.
+     *
+     * @param value - the string to check for adjacent spaces
+     */
     private static void checkAdjacentSpaces(String value) {
        int currSpace = value.indexOf(" ");
         boolean onSpace = false;
         boolean adjacentSpaces = false;
         for (int i = 0; i < value.length(); i++) {
             if (value.charAt(i) == ' ' && onSpace){
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Cannot have adjacent spaces.");
             } else if (value.charAt(i) == ' ') {
                 onSpace = true;
             } else {
@@ -36,10 +70,16 @@ public class NumbersError {
         }
     }
 
+    /**
+     * Checks if negative is after beginning of word.
+     * Exception is throw if so.
+     *
+     * @param value - the string to check for the negative index in
+     * @param negWord - the negative word to check for in the string
+     */
     private static void checkMisplacedNegative(String value, String negWord) {
-
         if (value.indexOf(negWord) > 0){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Must put negative at front.");
         }
     }
 
@@ -64,22 +104,33 @@ public class NumbersError {
         if (enums.contains(SpecialWords.zero)) {
             enums.remove(SpecialWords.zero);
             if (!enums.isEmpty()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Zero must be alone.");
             }
         }
         if (enums.contains(SpecialWords.naught)) {
             enums.remove(SpecialWords.naught);
             if (!enums.isEmpty()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Naught must be alone.");
             }
         }
     }
 
+    /**
+     * Checks for adjacent ones in the string.
+     * Exception is thrown if adjacent ones are found.
+     *
+     * @param enums - the enums to check for adjacent ones
+     */
     public static void checkMultipleOnes(List<SpecialWords> enums){
-
 
     }
 
+    /**
+     * Checks for multiple negatives in the string.
+     * Exception is thrown if multiple are found.
+     *
+     * @param value - the string to check for multiple negatives
+     */
     public static void checkMultipleNegatives(String value){
         int count = 0;
         for (int i = 0; i < value.length(); i++) {
@@ -95,7 +146,7 @@ public class NumbersError {
             }
         }
         if (count > 1){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Cannot have multiple negatives.");
         }
     }
 }
