@@ -21,6 +21,10 @@ public class NumbersError {
         checkSpaceAtEnd(value);
         checkAdjacentSpaces(value);
         checkMultipleNegatives(value);
+        checkMultipleHundreds(value);
+    }
+
+    private static void checkMultipleHundreds(String value) {
     }
 
     /**
@@ -112,9 +116,6 @@ public class NumbersError {
 //        checkThousandMillion(enums);
     }
 
-    private static void checkThousandModifier(List<SpecialWords> enums) {
-    }
-
     /**
      * Checks if the input number to check has a modifier.
      * Throws an exception if not.
@@ -129,7 +130,7 @@ public class NumbersError {
         for (int i = enums.size() - 1; i >= 0; i--) {
             if (enums.get(i).value == numToCheck){
                 hadValue = true;
-            } else if (hadValue && !isInRange(enums.get(i).value, rangeStart, rangeStart)) {
+            } else if (hadValue && !isInRange(enums.get(i).value, rangeStart, rangeEnd)) {
                 throw new IllegalArgumentException("Need proper value modifier.");
             } else {
                 hadValue = false;
