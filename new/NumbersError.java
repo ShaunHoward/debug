@@ -96,7 +96,12 @@ public class NumbersError {
      */
     public static void checkExplodedSyntax(List<SpecialWords> enums){
         checkZeroString(enums);
-        checkMultipleOnes(enums);
+        //Check adjacent ones values.
+        checkAdjacentValues(enums, 1, 9);
+        //Check adjacent teens values.
+        checkAdjacentValues(enums, 9, 19);
+        //Check adjacent nty values.
+        checkAdjacentValues(enums, 19, 90);
     }
 
     /**
@@ -122,12 +127,23 @@ public class NumbersError {
     }
 
     /**
-     * Checks for adjacent ones in the string.
-     * Exception is thrown if adjacent ones are found.
+     * Checks for adjacent values in the string.
+     * Exception is thrown if adjacent values are found.
      *
-     * @param enums - the enums to check for adjacent ones
+     * @param enums - the enums to check for adjacent values
      */
-    public static void checkMultipleOnes(List<SpecialWords> enums){
+    public static void checkAdjacentValues(List<SpecialWords> enums, int rangeStart, int rangeEnd){
+        boolean hadValue = false;
+        for (SpecialWords word: enums){
+            if (word.value > rangeStart && word.value <= rangeEnd){
+                if (hadValue) {
+                    throw new IllegalArgumentException("Cannot have adjacent values.");
+                }
+                hadValue = true;
+            } else {
+                hadValue = false;
+            }
+        }
 
     }
 

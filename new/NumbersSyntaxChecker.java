@@ -13,11 +13,13 @@ public class NumbersSyntaxChecker {
 	private boolean canBeHundreds;
 	private boolean canBeTens;
 	private boolean canBeOnes;
+    private boolean canBeMillion;
 	
 	/**
 	 * Initialize The syntax checker with its default values for the booleans.
 	 */
 	public NumbersSyntaxChecker(){
+        canBeMillion = true;
 		canBeMultiplier = true;
 		canBeHundreds = true;
 		canBeTens = true;
@@ -107,10 +109,14 @@ public class NumbersSyntaxChecker {
 	 * How to handle the booleans when the word contains a value between 10 and 19.
 	 */
 	private void teensCase() {
-		canBeTens = false;
-		canBeOnes = false;
-		canBeHundreds = false;
-		canBeMultiplier = true;
+        if (canBeTens) {
+            canBeTens = false;
+            canBeOnes = false;
+            canBeHundreds = false;
+            canBeMultiplier = true;
+        } else {
+            throw new IllegalArgumentException();
+        }
 	}
 	
 	/**
@@ -150,6 +156,7 @@ public class NumbersSyntaxChecker {
 	private void thousandCase() {
 		//It pretty much resets it, except we can't have any more thousands and million can't be after here.
 		if(canBeMultiplier){
+            canBeMillion = false;
 			canBeHundreds = false;
 			canBeTens = true;
 			canBeOnes = true;
@@ -165,7 +172,7 @@ public class NumbersSyntaxChecker {
 	 */
 	private void millionCase() {
 		//It pretty much resets it, but no more millions.
-		if(canBeMultiplier){
+		if(canBeMultiplier && canBeMillion){
 			canBeHundreds = false;
 			canBeTens = true;
 			canBeOnes = true;
