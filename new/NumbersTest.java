@@ -215,7 +215,6 @@ public class NumbersTest {
         //Loop through the illegal inputs, making sure each one fails
         for (int i = 0; i < illegalInputs.length; i++) {
             try {
-                System.out.println(Numbers.stringToInteger(illegalInputs[i]));
                 fail(illegalInputs[i] + " Succeeded when it should have thrown an exception for having illegal syntax.");
             } catch (IllegalArgumentException e) {
                 //This one correctly fails!

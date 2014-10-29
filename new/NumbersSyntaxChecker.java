@@ -9,10 +9,7 @@ import java.util.List;
  */
 public class NumbersSyntaxChecker {
 	//I keep track of which types of numbers can be in this place, if its wrong it will cause an error.
-	private boolean doesntHaveMillion;
 	private boolean canBeMultiplier;
-	private boolean doesntHaveThousand;
-	private boolean doesntHaveHundred;
 	private boolean canBeHundreds;
 	private boolean canBeTens;
 	private boolean canBeOnes;
@@ -21,10 +18,7 @@ public class NumbersSyntaxChecker {
 	 * Initialize The syntax checker with its default values for the booleans.
 	 */
 	public NumbersSyntaxChecker(){
-		doesntHaveMillion = true;
 		canBeMultiplier = true;
-		doesntHaveThousand = true;
-		doesntHaveHundred = true;
 		canBeHundreds = true;
 		canBeTens = true;
 		canBeOnes = true;
@@ -33,7 +27,6 @@ public class NumbersSyntaxChecker {
 	/**
 	 * This method will check to make sure the syntax of the string is correct.
 	 * @param words The words that comprise the string.
-	 * @return True if correct, false if not.
 	 */
 	public void checkSyntax(List<SpecialWords> words) {
 		//The input can't be empty. Also zero can't be in the string if they are not alone.
@@ -101,6 +94,7 @@ public class NumbersSyntaxChecker {
 			if(canBeTens){
 				canBeHundreds = true;
 			}
+            canBeOnes = false;
 			canBeMultiplier = true;
 			canBeTens = false;
 		}
@@ -116,7 +110,7 @@ public class NumbersSyntaxChecker {
 		canBeTens = false;
 		canBeOnes = false;
 		canBeHundreds = false;
-		canBeMultiplier = true;	
+		canBeMultiplier = true;
 	}
 	
 	/**
@@ -128,6 +122,7 @@ public class NumbersSyntaxChecker {
 			canBeOnes = true;
 			canBeTens = false;
 			canBeMultiplier = true;
+
 		}
 		else{
 			throw new IllegalArgumentException();
@@ -139,9 +134,8 @@ public class NumbersSyntaxChecker {
 	 */
 	private void hundredCase() {
 		//Tens and ones can go after 100 always, so set those to true.
-		if(canBeHundreds && doesntHaveHundred){
+		if(canBeHundreds){
 			canBeHundreds = false;
-			doesntHaveHundred = false;
 			canBeTens = true;
 			canBeOnes = true;
 		}
@@ -155,10 +149,7 @@ public class NumbersSyntaxChecker {
 	 */
 	private void thousandCase() {
 		//It pretty much resets it, except we can't have any more thousands and million can't be after here.
-		if(canBeMultiplier && doesntHaveThousand){
-			doesntHaveThousand = false;
-			doesntHaveMillion = false;
-			doesntHaveHundred = true;
+		if(canBeMultiplier){
 			canBeHundreds = false;
 			canBeTens = true;
 			canBeOnes = true;
@@ -174,11 +165,7 @@ public class NumbersSyntaxChecker {
 	 */
 	private void millionCase() {
 		//It pretty much resets it, but no more millions.
-		if(canBeMultiplier && doesntHaveMillion){
-            //Thousands do not exist at this point.
-			doesntHaveThousand = true;
-			doesntHaveMillion = false;
-			doesntHaveHundred = true;
+		if(canBeMultiplier){
 			canBeHundreds = false;
 			canBeTens = true;
 			canBeOnes = true;

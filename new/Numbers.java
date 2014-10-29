@@ -24,9 +24,8 @@ public class Numbers {
 			return 0;
 		}
 
-        //Check if the input string has erroneous syntax.
         NumbersError.checkStringSyntax(inputString);
-		
+
 		//We will multiply the final value by this to ensure it handles the negative.
 		int negativeMultiplier = 1;
 
@@ -54,7 +53,7 @@ public class Numbers {
 		//Check the remaining syntax, to make sure it will not yield strange results.
 		NumbersSyntaxChecker syntaxChecker = new NumbersSyntaxChecker();
 		syntaxChecker.checkSyntax(words);
-		
+
 		//Computer the actual integer with the checked special words.
 		return computeInteger(words);
 	}
@@ -101,11 +100,14 @@ public class Numbers {
 	private static List<SpecialWords> explodeString(String s){
         List<String> words = Arrays.asList(s.split(" "));
 		List<SpecialWords> enumWords = new ArrayList<SpecialWords>();
-        System.out.println(words.toString());
 
 		for(int j = 0; j < words.size(); j++){
 			enumWords.add(SpecialWords.valueOf(words.get(j)));
 		}
+
+        //Check to make sure the number will be built correctly.
+        NumbersError.checkExplodedSyntax(enumWords);
+
 		return enumWords;
 	}
 
