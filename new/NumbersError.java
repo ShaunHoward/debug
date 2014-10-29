@@ -9,23 +9,18 @@ public class NumbersError {
 
     /**
      * Checks the syntax of the input string where
-     * negative signs and spaces still reside. Throws
-     * an exception when any spaces/negatives are used
+     * negative signs and spaces still reside.
+     * Throws an exception when any spaces/negatives are used
      * incorrectly.
      *
      * @param value - the string to check for incorrect
-     *              negative or space usage
+     *              negative and minus
      */
     public static void checkStringSyntax(String value){
         checkSpaceAtFront(value);
         checkSpaceAtEnd(value);
         checkAdjacentSpaces(value);
         checkMultipleNegatives(value);
-        checkMultipleHundreds(value);
-    }
-
-    private static void checkMultipleHundreds(String value) {
-        int hundCount = 0;
     }
 
     /**

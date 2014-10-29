@@ -5,6 +5,143 @@ import org.junit.Test;
 
 public class NumbersTest {
 
+    //Test one word cases
+    @Test
+    public void testOneWordNumbers(){
+        assertEquals(Numbers.stringToInteger("two"), 2);
+        assertEquals(Numbers.stringToInteger("ten"), 10);
+        assertEquals(Numbers.stringToInteger("nineteen"), 19);
+        assertEquals(Numbers.stringToInteger("twenty"), 20);
+        assertEquals(Numbers.stringToInteger("fifty"), 50);
+        assertEquals(Numbers.stringToInteger("ninety"), 90);
+    }
+
+    //Test two word cases
+    @Test
+    public void testTwoWordNumbers(){
+        assertEquals(Numbers.stringToInteger("two hundred"), 200);
+        assertEquals(Numbers.stringToInteger("one thousand"), 1000);
+        assertEquals(Numbers.stringToInteger("ten thousand"), 10000);
+        assertEquals(Numbers.stringToInteger("seventy five"), 75);
+        assertEquals(Numbers.stringToInteger("three million"), 3000000);
+    }
+
+    //Test hundred thousand case
+    @Test (expected=IllegalArgumentException.class)
+    public void testHundredThousand(){
+        Numbers.stringToInteger("ten hundred thousand");
+    }
+
+    //Test negative numbers
+    @Test
+    public void testNegativeNumbers(){
+        assertEquals(Numbers.stringToInteger("negative two hundred"), -200);
+        assertEquals(Numbers.stringToInteger("Minus one thousand"), -1000);
+        assertEquals(Numbers.stringToInteger("negative ten thousand"), -10000);
+        assertEquals(Numbers.stringToInteger("minus seventy five"), -75);
+        assertEquals(Numbers.stringToInteger("NEGATIVE three million"), -3000000);
+    }
+
+    //Test million thousand
+    @Test (expected=IllegalArgumentException.class)
+    public void testMillionThousand(){
+        Numbers.stringToInteger("ten million thousand");
+    }
+
+    //Test number with all fields (million..thousand..hundred)
+    @Test
+    public void testAllFieldsNumber(){
+        assertEquals(Numbers.stringToInteger("NEGATIVE three million five hundred twenty " +
+                "five thousand four hundred thirty three"), -3525433);
+    }
+
+    //Test adjacent values (exception)
+    @Test(expected=IllegalArgumentException.class)
+    public void testAdjacentValues(){
+        Numbers.stringToInteger("four thousand thousand");
+    }
+
+    //Test wrong order (exception)
+    @Test(expected=IllegalArgumentException.class)
+    public void testInvalidOrder(){
+        Numbers.stringToInteger("four thousand five million");
+    }
+
+    //Test double negative
+    @Test(expected=IllegalArgumentException.class)
+    public void testDoubleNegative(){
+        Numbers.stringToInteger("negative minus four thousand");
+    }
+
+    //Test double zero
+    @Test(expected=IllegalArgumentException.class)
+    public void testDoubleZero(){
+        Numbers.stringToInteger("zero naught");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testBeginningSpace(){
+        Numbers.stringToInteger(" four thousand");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testMiddleAdjacentSpaces(){
+        Numbers.stringToInteger("four   thousand");
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testEndSpace(){
+        Numbers.stringToInteger("four thousand ");
+    }
+
+    @Test
+    public void testOnes() {
+        assertEquals(Numbers.stringToInteger("two"), 2);
+        assertEquals(Numbers.stringToInteger("eight"), 8);
+    }
+
+    @Test
+    public void testTeens() {
+        assertEquals(Numbers.stringToInteger("twelve"), 12);
+        assertEquals(Numbers.stringToInteger("eighteen"), 18);
+    }
+
+    @Test
+    public void testTens() {
+        assertEquals(Numbers.stringToInteger("twenty"), 20);
+        assertEquals(Numbers.stringToInteger("eighty"), 80);
+    }
+
+    @Test
+    public void testComplexTens() {
+        assertEquals(Numbers.stringToInteger("twenty two"), 22);
+        assertEquals(Numbers.stringToInteger("twenty eight"), 28);
+        assertEquals(Numbers.stringToInteger("minus twenty two"), -22);
+    }
+
+    @Test
+    public void testHundreds() {
+        assertEquals(Numbers.stringToInteger("two hundred"), 200);
+        assertEquals(Numbers.stringToInteger("eight hundred"), 800);
+        assertEquals(Numbers.stringToInteger("minus two hundred"), -200);
+    }
+
+    @Test
+    public void testComplexHundreds() {
+        assertEquals(Numbers.stringToInteger("two hundred twenty"), 220);
+        assertEquals(Numbers.stringToInteger("eight hundred thirty one"), 831);
+        assertEquals(Numbers.stringToInteger("minus two hundred eighty three"), -283);
+    }
+
+    @Test
+    public void testThousands() {
+        assertEquals(Numbers.stringToInteger("two thousand"), 2000);
+        assertEquals(Numbers.stringToInteger("minus two thousand"), -2000);
+        assertEquals(Numbers.stringToInteger("two thousand three hundred"), 2300);
+        assertEquals(Numbers.stringToInteger("two thousand three hundred ten"), 2310);
+        assertEquals(Numbers.stringToInteger("two thousand three hundred thirteen"), 2313);
+    }
+
     @Test
     public void testCapitalization() {
         //The zeros
@@ -271,136 +408,5 @@ public class NumbersTest {
                 //This one correctly fails
             }
         }
-    }
-
-    @Test
-    public void testOnes() {
-        assertEquals(Numbers.stringToInteger("two"), 2);
-        assertEquals(Numbers.stringToInteger("eight"), 8);
-    }
-
-    @Test
-    public void testTeens() {
-        assertEquals(Numbers.stringToInteger("twelve"), 12);
-        assertEquals(Numbers.stringToInteger("eighteen"), 18);
-    }
-
-    @Test
-    public void testTens() {
-        assertEquals(Numbers.stringToInteger("twenty"), 20);
-        assertEquals(Numbers.stringToInteger("eighty"), 80);
-    }
-
-    @Test
-    public void testComplexTens() {
-        assertEquals(Numbers.stringToInteger("twenty two"), 22);
-        assertEquals(Numbers.stringToInteger("twenty eight"), 28);
-        assertEquals(Numbers.stringToInteger("minus twenty two"), -22);
-    }
-
-    @Test
-    public void testHundreds() {
-        assertEquals(Numbers.stringToInteger("two hundred"), 200);
-        assertEquals(Numbers.stringToInteger("eight hundred"), 800);
-        assertEquals(Numbers.stringToInteger("minus two hundred"), -200);
-    }
-
-    @Test
-    public void testComplexHundreds() {
-        assertEquals(Numbers.stringToInteger("two hundred twenty"), 220);
-        assertEquals(Numbers.stringToInteger("eight hundred thirty one"), 831);
-        assertEquals(Numbers.stringToInteger("minus two hundred eighty three"), -283);
-    }
-
-    @Test
-    public void testThousands() {
-        assertEquals(Numbers.stringToInteger("two thousand"), 2000);
-        assertEquals(Numbers.stringToInteger("minus two thousand"), -2000);
-        assertEquals(Numbers.stringToInteger("two thousand three hundred"), 2300);
-        assertEquals(Numbers.stringToInteger("two thousand three hundred ten"), 2310);
-        assertEquals(Numbers.stringToInteger("two thousand three hundred thirteen"), 2313);
-    }
-
-    //Test one word cases
-    @Test
-    public void testOneWordNumbers(){
-        assertEquals(Numbers.stringToInteger("two"), 2);
-        assertEquals(Numbers.stringToInteger("ten"), 10);
-        assertEquals(Numbers.stringToInteger("nineteen"), 19);
-        assertEquals(Numbers.stringToInteger("twenty"), 20);
-        assertEquals(Numbers.stringToInteger("fifty"), 50);
-        assertEquals(Numbers.stringToInteger("ninety"), 90);
-    }
-
-    //Test two word cases
-    @Test
-    public void testTwoWordNumbers(){
-        assertEquals(Numbers.stringToInteger("two hundred"), 200);
-        assertEquals(Numbers.stringToInteger("one thousand"), 1000);
-        assertEquals(Numbers.stringToInteger("ten thousand"), 10000);
-        assertEquals(Numbers.stringToInteger("seventy five"), 75);
-        assertEquals(Numbers.stringToInteger("three million"), 3000000);
-    }
-
-    //Test hundred thousand case
-    @Test (expected=IllegalArgumentException.class)
-    public void testHundredThousand(){
-        Numbers.stringToInteger("ten hundred thousand");
-    }
-
-    //Test negative numbers
-    @Test
-    public void testNegativeNumbers(){
-        assertEquals(Numbers.stringToInteger("negative two hundred"), -200);
-        assertEquals(Numbers.stringToInteger("Minus one thousand"), -1000);
-        assertEquals(Numbers.stringToInteger("negative ten thousand"), -10000);
-        assertEquals(Numbers.stringToInteger("minus seventy five"), -75);
-        assertEquals(Numbers.stringToInteger("NEGATIVE three million"), -3000000);
-    }
-
-    //Test million thousand
-    @Test (expected=IllegalArgumentException.class)
-    public void testMillionThousand(){
-        Numbers.stringToInteger("ten million thousand");
-    }
-
-    //Test number with all fields (million..thousand..hundred)
-    @Test
-    public void testAllFieldsNumber(){
-        assertEquals(Numbers.stringToInteger("NEGATIVE three million five hundred twenty " +
-                "five thousand four hundred thirty three"), -3525433);
-    }
-
-    //Test adjacent values (exception)
-    @Test(expected=IllegalArgumentException.class)
-    public void testAdjacentValues(){
-        Numbers.stringToInteger("four thousand thousand");
-    }
-
-    //Test wrong order (exception)
-    @Test(expected=IllegalArgumentException.class)
-    public void testInvalidOrder(){
-        Numbers.stringToInteger("four thousand five million");
-    }
-
-    //Test double negative
-    @Test(expected=IllegalArgumentException.class)
-    public void testDoubleNegative(){
-        Numbers.stringToInteger("negative minus four thousand");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testBeginningSpace(){
-        Numbers.stringToInteger(" four thousand");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testMiddleAdjacentSpaces(){
-        Numbers.stringToInteger("four   thousand");
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void testEndSpace(){
-        Numbers.stringToInteger("four thousand ");
     }
 }

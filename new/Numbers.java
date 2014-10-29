@@ -125,7 +125,6 @@ public class Numbers {
         in.close();
         System.out.println(stringToInteger(inputStringBuilder.toString()));
         System.exit(7);
-
 	}
 
 }
