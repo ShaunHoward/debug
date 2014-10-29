@@ -107,7 +107,7 @@ public class NumbersError {
         //Check thousand modifier.
         //Check million modifier.
         //Check thousand - million
-        
+
     }
 
     /**
