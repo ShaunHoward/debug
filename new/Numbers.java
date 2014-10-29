@@ -21,20 +21,17 @@ public class Numbers {
 		}
 		
 		//We will multiply the final value by this to ensure it handles the negative. Its just reducing complexity.
-		int negativeMultiplier = 0;
+		int negativeMultiplier = 1;
 
 		//Checks if it starts with negative, then removes it
-		if(inputString.startsWith("negative")){
-			inputString = inputString.replaceFirst("negative", "");
+		if(inputString.startsWith("negative") || inputString.startsWith("minus")){
+			inputString = inputString.replace("negative", "");
+            inputString = inputString.replace("minus", "");
 			negativeMultiplier = -1;
 		}
-		//Checks if it starts with minus, then removes it
-		else if(inputString.startsWith("minus")){
-			inputString = inputString.replaceFirst("minus", "");
-		}
-		
+
 		//If it all works out, send it to the next method.
-		return computeInteger(inputString);
+		return negativeMultiplier * computeInteger(inputString);
 	}
 	
 	/**
@@ -43,7 +40,7 @@ public class Numbers {
 	 * @return The integer representation of the string.
 	 */
 	private static int computeInteger(String inputString) {
-		List<SpecialWords> words = explodeString(inputString);
+		List<SpecialWords> words = explodeString(inputString.trim());
         SpecialWords keyWord = null;
 		
 		//Check the remaining syntax, to make sure it will not yield strange results.
